@@ -5,6 +5,11 @@ import (
 	"sync"
 )
 
+func From(c context.Context) T {
+	ctx := newctx(c)
+	return ctx
+}
+
 func newctx(c context.Context) T {
 	return T{Context: c, m: new(sync.Mutex)}
 }
