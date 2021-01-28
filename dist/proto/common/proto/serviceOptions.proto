@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package common;
+
+import "google.protobuf/descriptor.proto";
+// option go_package = "github.com/o-kit/micro-kit/dist/proto/common";
+
+message Duration {
+    int64 nanos = 1;
+}
+
+message WebapiOption {
+    // 该方法是否支持webapi
+    bool enable = 1;
+    // 使用multipart上传文件
+    bool upload = 2;
+    // 是否禁止该方法在webapi中显示
+    bool disable = 3;
+}
+
+message AuthOption {
+    // 是否需要登陆
+    bool user = 1;
+    // 是否需要管理员权限
+    bool admin = 2;
+}
+
+message ServiceOption {
+    // 全局开启 webapi
+    bool webapi = 1;
+}
+
+message ServiceOpDesc {
+    string name = 1;
+    ServiceOption option = 2;
+    repeated MethodOpDesc methods = 3;
+}
+
+message MethodOpDesc {
+    string name = 1;
+    WebapiOption webapi = 2;
+    AuthOption auth = 3;
+    Duration timeout = 4;
+    bool isClientStreaming = 5;
+    bool isServerStreaming = 6;
+}
+
+extend google.protobuf.MethodOptions {
+    WebapiOption webapi = 711845;
+    AuthOption auth = 711846;
+    string timeout = 711847;
+}
+
+extend google.protobuf.ServiceOptions {
+    ServiceOption service = 711845;
+}
+
+
