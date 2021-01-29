@@ -119,6 +119,11 @@ func (s *WebServer) Serve(ctx context.T, ln net.Listener) error {
 	return svr.Serve(ln)
 }
 
+// 关闭服务
+func (s *WebServer) Close() error {
+	return nil
+}
+
 // 注册接口到路由中 - 具体实现
 func (s *WebServer) WebapiHandlerFunc(path string, handler HandlerFunc) {
 	s.initMux()

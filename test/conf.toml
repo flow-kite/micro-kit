@@ -1,0 +1,9 @@
+
+[dbs]
+	[dbs.coast]
+	    driverName = "mysql"
+	    host = "{{key `service/coast/mysql/coast_mysql_host`}}"
+	    port = "{{ key `service/coast/mysql/coast_mysql_port`}}"
+	    username = "{{ key `service/coast/mysql/coast_mysql_username`}}"
+	    password = "{{ key `service/coast/mysql/coast_mysql_password`}}"
+	    database = "{{ key `service/coast/mysql/coast_mysql_database`}}"

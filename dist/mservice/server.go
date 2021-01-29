@@ -6,8 +6,10 @@ import (
 
 	"github.com/soheilhy/cmux"
 
+	"github.com/o-kit/micro-kit/dist/mconsul"
 	"github.com/o-kit/micro-kit/dist/proto/common"
 	"github.com/o-kit/micro-kit/misc/context"
+	"github.com/o-kit/micro-kit/misc/log"
 )
 
 type Options interface {
@@ -19,11 +21,31 @@ type Options interface {
 type Server struct {
 	options []*common.ServiceOpDesc
 
-	serviceName string // 服务名称
-	Port        int    // 端口号
+	serviceName string         // 服务名称
+	Port        int            // 端口号
+	services    []*serviceInfo // 需要注册到consul上的信息
 
 	GrpcServer
 	WebServer
+}
+
+type serviceInfo struct {
+	proto    *mconsul.Service
+	protocol []string
+}
+
+// 注册服务
+func (s *serviceInfo) Register(port int, deregister bool, tags []string) error {
+	if err := s.proto.Register(port, deregister, tags); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// 注销服务
+func (s *serviceInfo) Deregister() error {
+	return s.proto.Deregister()
 }
 
 // run GRPC and WebApi
@@ -44,6 +66,23 @@ func (s *Server) Run(ctx context.T) error {
 	}
 
 	return mux.Serve()
+}
+
+// 关闭 GRPC + WebApi 服务
+func (s *Server) Close() error {
+	{
+		for _, service := range s.services {
+			// 关闭服务
+			fmt.Println(service)
+			if err := service.Deregister(); err != nil {
+				log.Error(err)
+			}
+		}
+	}
+
+	s.GrpcServer.Close()
+	s.WebServer.Close()
+	return nil
 }
 
 func (s *Server) GetAllServiceDesc() []*common.ServiceOpDesc {

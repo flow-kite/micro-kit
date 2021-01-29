@@ -54,6 +54,11 @@ func (s *GrpcServer) Serve(ln net.Listener) {
 	_ = s.GetServer().Serve(ln)
 }
 
+func (s *GrpcServer) Close() error {
+	s.grpc.GracefulStop()
+	return nil
+}
+
 // 服务端拦截器 + 注入在GetServer时候
 func (s *GrpcServer) serverInterceptor(ctx c2.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 
