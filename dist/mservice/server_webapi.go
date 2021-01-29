@@ -32,6 +32,7 @@ type WebApiRegister interface {
 // WEB 服务 + 利用http的路由保存method，以供提供WebApi服务
 type WebServer struct {
 	mux        *http.ServeMux // 路由
+	options    Options
 	methods    map[string][]string
 	middleware []Middleware
 }

@@ -25,7 +25,8 @@ type GrpcServer struct {
 	// 一个GRPC可以提供注册多个service
 	services []grpcServiceInfo
 
-	grpc *grpc.Server
+	grpc    *grpc.Server // GRPC 服务端
+	options Options      // 服务的可选项
 
 	unaryInterceptor []grpc.UnaryServerInterceptor // 服务端拦截器
 	traceOnce        sync.Once
