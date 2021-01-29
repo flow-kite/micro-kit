@@ -4,8 +4,11 @@ import (
 	c2 "golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer"
+
+	"github.com/o-kit/micro-kit/dist/proto/common"
 )
 
+// GRPC Client
 type Client struct {
 	GRPC *grpc.ClientConn
 	cfg  *ClientConfig
@@ -14,6 +17,12 @@ type Client struct {
 type ClientConfig struct {
 	Balancer balancer.Balancer
 	Name     string
+	Desc     *common.ServiceOpDesc // 这里拿到的是每个服务的 proto 文件中的配置信息
+}
+
+// 获取客户端默认配置
+func DefaultClientConfig() *ClientConfig {
+	return &ClientConfig{}
 }
 
 func (c *Client) clientInterceptor(ctx c2.Context, method string, req, reply interface{}, cc *grpc.ClientConn,
