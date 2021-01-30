@@ -57,10 +57,12 @@ func (s *Server) Run(ctx context.T) error {
 	}
 	mux := cmux.New(ln)
 	{
+		fmt.Println("running cmux at GRPC ...")
 		ln := mux.MatchWithWriters(cmux.HTTP2MatchHeaderFieldSendSettings("content-type", "application/grpc"))
 		go s.GrpcServer.Serve(ln)
 	}
 	{
+		fmt.Println("running cmux at WebApi ...")
 		ln := mux.Match(cmux.Any())
 		go s.WebServer.Serve(ctx, ln)
 	}
