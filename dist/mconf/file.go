@@ -122,7 +122,7 @@ func ReadFile(fp string, obj interface{}) error {
 	return viper.Unmarshal(obj)
 }
 
-var defaultConf = "test/conf.toml"
+var defaultConf = "conf/conf.toml"
 
 var byFlagOnce sync.Once
 
